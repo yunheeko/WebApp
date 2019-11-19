@@ -6,9 +6,7 @@ node {
     def rtMaven = Artifactory.newMavenBuild()
     def buildInfo
     
-    tools {
-    maven 'maven'
-  }
+ rtMaven.tool = "maven"
 
     stage('Clone sources') {
         git url: 'https://github.com/duorg/webapp.git'

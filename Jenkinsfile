@@ -8,7 +8,7 @@
             agent any
             steps {
               withSonarQubeEnv('sonar') {
-                sh 'mvn clean package sonar:sonar'
+                sh 'mvn clean package sonar:sonar -Dsonar.host.url=http://3.1.202.152:9000/ -Dsonar.login=ff177383dda7da09c6364187a7d1b057c7fe64b7 -Dsonar.projectName=PhoenixProject'
               }
             }
           }

@@ -1,7 +1,4 @@
 node {
-   tools {
-    maven 'maven'
-  }
   stage('SCM') {
     git 'https://github.com/duorg/webapp.git'
   }

@@ -26,19 +26,19 @@ node {
         server.publishBuildInfo buildInfo
     }
 
-	stage('SonarQube analysis') { 
-        withSonarQubeEnv('sonar') { 
-          sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.3.0.603:sonar ' + 
-          '-f all/pom.xml ' +
-          '-Dsonar.host.url=$SONAR_HOST_URL ' +
-          '-Dsonar.login=admin ' +
-          '-Dsonar.password=password ' +
-          '-Dsonar.language=java ' +
-          '-Dsonar.sources=. ' +
-          '-Dsonar.tests=. ' +
-          '-Dsonar.test.inclusions=**/test/java/servlet/createpage_junit.java ' +
-          '-Dsonar.exclusions=**/test/java/servlet/createpage_junit.java'
-        }
+    stage('build & SonarQube Scan') {
+      withSonarQubeEnv('sonar') {
+      sh 'mvn clean package sonar:sonar'
+    } // SonarQube taskId is automatically attached to the pipeline context
+  }
+  
+   stage("Quality Gate") {
+   timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
+     def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+     if (qg.status != 'OK') {
+      error "Pipeline aborted due to quality gate failure: ${qg.status}"
     }
+  }
+  }
     }
 	 

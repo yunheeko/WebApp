@@ -1,4 +1,5 @@
 node {
+  rtMaven.tool = "maven"
   stage('SCM') {
     git 'https://github.com/duorg/webapp.git'
   }
